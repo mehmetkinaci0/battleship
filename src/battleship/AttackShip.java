@@ -1,0 +1,216 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package battleship;
+
+import static battleship.HideShip.jPanel1;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
+import javax.swing.JList;
+import javax.swing.JPanel;
+
+/**
+ *
+ * @author Mehmet
+ */
+public class AttackShip extends javax.swing.JFrame {
+
+    private JButton[][] buttons = new JButton[10][10];
+    public static JPanel jPanel1 = new JPanel(); //gemi attack
+    public static JPanel jPanel2 = new JPanel(); //attack butonu
+    public static JPanel jPanel3 = new JPanel(); //atak mesajlari
+    public static JButton btnAttack = new JButton("ATTACK");
+    int sutun, satir;
+    private JList list_messages = new JList();
+    CClient client;
+    public static JButton clickedAttack;
+
+    public static DefaultListModel list_model;
+
+    public AttackShip(CClient client) {
+        this.client = client;
+
+        initComponents();
+
+        list_model = new DefaultListModel();
+        list_messages.setModel(list_model);
+
+        jPanel3.add(list_messages);
+
+        this.setTitle(String.valueOf(this.client.myId));
+
+        this.setLayout(new BorderLayout());
+
+        jPanel1.setLayout(new GridLayout(11, 11)); // 10x10 buton + başlık satırı/kolonu
+        jPanel1.setPreferredSize(new Dimension(600, 600));
+
+        // satir ve sutun basliklari 
+        String[] sutunlar = {"", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
+        char[] satirlar = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'};
+
+        // sutun no ekle
+        for (String s : sutunlar) {
+            JButton headerBtn = new JButton(s);
+            headerBtn.setEnabled(false);
+            jPanel1.add(headerBtn);
+        }
+
+        char[] selectedRow = null;
+        int[] selectedCol = null;
+
+        // butonları ve satir bilgisi
+        for (int i = 0; i < 10; i++) {
+            // satirlari ekle
+            JButton rowHeader = new JButton(String.valueOf(satirlar[i]));
+            rowHeader.setEnabled(false);
+            jPanel1.add(rowHeader);
+
+            // butonlar
+            for (int j = 0; j < 10; j++) {
+                JButton btn = new JButton();
+                btn.setPreferredSize(new Dimension(50, 50));
+                btn.setBackground(Color.white);
+                btn.setOpaque(true);
+                btn.setBorderPainted(false);
+                buttons[i][j] = btn;
+
+                
+                btn.addActionListener(e -> {//tiklanan butonun koordinat bilgisini alma
+                    
+                    JButton clickedButton = (JButton) e.getSource();
+                    clickedAttack = clickedButton;//global tanımlanan butona atama
+                    int row = -1, col = -1;
+                    int m = 0;
+                    
+                    for (int r = 0; r < 10; r++) {
+                        for (int c = 0; c < 10; c++) {
+                            if (buttons[r][c] == clickedButton) {
+                                row = r;
+                                satir = row;
+                                col = c;
+                                sutun = col;
+                                break;
+                            }
+                        }
+                        if (row != -1) {
+                            break;
+                        }
+                    }
+
+                });
+
+                jPanel1.add(btn);
+            }
+        }
+
+        btnAttack.setSize(800, 800);
+
+        btnAttack.addActionListener(e -> {//secilen koordinata gore atak mesaji gonderme
+            
+            String coordinat = satirlar[satir] + sutunlar[sutun + 1];
+            String msg = "ATTACK: " + this.client.matchid + "," + this.client.myId + "," + coordinat;
+
+            try {
+                this.client.SendMsg(msg);
+
+            } catch (IOException ex) {
+                Logger.getLogger(AttackShip.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        });
+
+        jPanel2.add(btnAttack);
+
+        this.add(jPanel1, BorderLayout.CENTER);
+        this.add(jPanel2, BorderLayout.SOUTH);
+        this.add(jPanel3, BorderLayout.EAST);
+        this.setSize(800, 700);
+        this.setVisible(true);
+
+    }
+
+    public void restart() {//oyunun tekrar baslamasi icin gecmis silme
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 10; j++) {
+                buttons[i][j].setBackground(Color.WHITE);
+            }
+        }
+        clickedAttack = null;
+
+        list_model.clear();
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 300, Short.MAX_VALUE)
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(AttackShip.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(AttackShip.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(AttackShip.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(AttackShip.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        CClient client = null;
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new AttackShip(client).setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    // End of variables declaration//GEN-END:variables
+}
