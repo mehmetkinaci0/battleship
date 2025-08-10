@@ -11,10 +11,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
 
-/**
- *
- * @author samet
- */
+
 public class SClient extends Thread {
 
     Socket csokcet;
@@ -48,25 +45,13 @@ public class SClient extends Thread {
         while (iterator.hasNext()) {
             SClient client = iterator.next();
             if (Integer.valueOf(myID) == client.id || Integer.valueOf(matchId) == client.id) {
-                iterator.remove(); // güvenli silme
+                iterator.remove(); 
             }
         }
 
     }
 
-    public void removeFrame(String myID, String matchId) {
 
-        Iterator<CClient> iterator = Server.frames.iterator();
-        while (iterator.hasNext()) {
-            CClient client = iterator.next();
-            if (Integer.valueOf(myID) == client.myId || Integer.valueOf(matchId) == client.matchid) {
-                System.out.println(client.myId);
-                client.panel.setVisible(false);
-                iterator.remove(); // iterator üzerinden silmek güvenlidir
-            }
-        }
-
-    }
 
     @Override
     public void run() {
@@ -76,13 +61,13 @@ public class SClient extends Thread {
 
                 int rbyte = this.input.read();
                 byte buffer[] = new byte[rbyte];
-                this.input.read(buffer);//blocking
+                this.input.read(buffer);
                 String rmsg = new String(buffer);
 
                 System.out.println(new String(buffer));
-                String[] parts = rmsg.split(":"); // ["MATCH", " 1,2"]
+                String[] parts = rmsg.split(":"); 
 
-                String[] numbers = parts[1].trim().split(","); // ["1", "2"]
+                String[] numbers = parts[1].trim().split(","); 
 
                 String myID;
                 String matchID;
@@ -111,7 +96,7 @@ public class SClient extends Thread {
 
                     }
                     removeClient(myID, matchID);
-                    removeFrame(myID, matchID);
+
                 }
                 if (rmsg.startsWith("OK:")) {
 
@@ -226,7 +211,7 @@ public class SClient extends Thread {
                     while (iterator.hasNext()) {
                         SClient client = iterator.next();
                         if (Integer.valueOf(myID) == client.id ) {
-                            iterator.remove(); // güvenli silme
+                            iterator.remove(); 
                         }
                     }
                     

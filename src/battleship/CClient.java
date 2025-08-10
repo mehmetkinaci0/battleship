@@ -11,10 +11,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-/**
- *
- * @author samet
- */
+
 public class CClient extends Thread {
 
     JPanel panel;
@@ -105,7 +102,7 @@ public class CClient extends Thread {
                         this.SendMsg(message);
 
                     } else {
-                        // Reddedildiyse sunucuya mesaj gönder   
+                        
                     }
                 }
                 if (msg.startsWith("OK")) {
@@ -113,7 +110,7 @@ public class CClient extends Thread {
                     HideShip.jPanel1.setVisible(true);
                     HideShip.jPanel2.setVisible(true);
                     HideShip.jPanel3.setVisible(true);
-                    //HideShip.jPanel5.setVisible(true);
+
                 }
                 if (msg.startsWith("Pair: ")) {
                     String status = msg.split(":")[1];
@@ -136,9 +133,9 @@ public class CClient extends Thread {
                 }
                 if (msg.startsWith("ATTACK: ")) {
 
-                    String[] parts = msg.split(":"); // ["MATCH", " 1,2"]
+                    String[] parts = msg.split(":"); 
 
-                    String[] numbers = parts[1].trim().split(","); // ["1", "2"]
+                    String[] numbers = parts[1].trim().split(",");
 
                     String id = numbers[0];
                     String coordinat = numbers[1];
@@ -146,20 +143,12 @@ public class CClient extends Thread {
 
                     if (!this.hideShip.amiralCoordinats.isEmpty() || !this.hideShip.kruvazorCoordinats.isEmpty() || !this.hideShip.muhripCoordinats.isEmpty() || !this.hideShip.denizaltiCoordinats.isEmpty()) {
                         if (this.hideShip.amiralCoordinats.remove(coordinat)) {
-                            //as.list_model.addElement("Ship Amiral shooted!");
-                            // JOptionPane.showMessageDialog(null, "Ship Amiral shooted!");
                             this.SendMsg("STATUS: " + id + "," + matchID + "," + 1 + "," + "Ship Amiral shooted!");
                         } else if (this.hideShip.kruvazorCoordinats.remove(coordinat)) {
-                            //as.list_model.addElement("Ship Kruvazor shooted!");
-                            // JOptionPane.showMessageDialog(null, "Ship Kruvazor shooted!");
                             this.SendMsg("STATUS: " + id + "," + matchID + "," + 1 + "," + "Ship Kruvazor shooted!");
                         } else if (this.hideShip.muhripCoordinats.remove(coordinat)) {
-                            //as.list_model.addElement("Ship Muhrip shooted!");
-                            //JOptionPane.showMessageDialog(null, "Ship Muhrip shooted!");
                             this.SendMsg("STATUS: " + id + "," + matchID + "," + 1 + "," + "Ship Muhrip shooted!");
                         } else if (this.hideShip.denizaltiCoordinats.remove(coordinat)) {
-                            //as.list_model.addElement("Ship Denizalti shooted!");
-                            //JOptionPane.showMessageDialog(null, "Ship Denizalti shooted!");
                             this.SendMsg("STATUS: " + id + "," + matchID + "," + 1 + "," + "Ship Denizalti shooted!");
                         } else {
                             this.SendMsg("STATUS: " + id + "," + matchID + "," + 0 + "," + "not shoot");
@@ -170,9 +159,9 @@ public class CClient extends Thread {
 
                 }
                 if (msg.startsWith("CHECK: ")) {
-                    String[] parts = msg.split(":"); // ["MATCH", " 1,2"]
+                    String[] parts = msg.split(":"); 
 
-                    String[] numbers = parts[1].trim().split(","); // ["1", "2"]
+                    String[] numbers = parts[1].trim().split(","); 
 
                     String id = numbers[0];
                     String matchID = numbers[1];

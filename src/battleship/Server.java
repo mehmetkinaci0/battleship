@@ -12,13 +12,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
 
-/**
- *
- * @author samet
- */
 public class Server extends Thread {
 
-    //public class Server implements Runnable {  
     static int id = 0;
     ServerSocket server;
     public static ArrayList<SClient> clients;
